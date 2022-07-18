@@ -4,9 +4,13 @@
  */
 package com.dht.controllers;
 
+import com.dht.service.CategoryService;
+import com.dht.service.ProductService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,32 +22,17 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class IndexController {
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private ProductService productService;
+    
     @RequestMapping("/")
     public String index(Model model, 
-            @RequestParam(value = "kw", defaultValue = "") String kw) {
-        List<String> categories = new ArrayList<>();
-        categories.add("Mobile");
-        categories.add("Tablet");
-        categories.add("Desktop");
-        
-        model.addAttribute("categories", categories);
-        
-        List<String> products = new ArrayList<>();
-        products.add("iPhone 13 Pro");
-        products.add("iPhone 7 Plus");
-        products.add("iPad 2020 Pro");
-        products.add("Galaxy Tab S7");
-        products.add("Galaxy Tab S8");
-        products.add("iPhone 13 Pro");
-        products.add("iPhone 7 Plus");
-        products.add("iPad 2020 Pro");
-        products.add("Galaxy Tab S7");
-        products.add("Galaxy Tab S8");
-        
-        if (kw != null && !kw.isEmpty())
-            model.addAttribute("products", products.stream().filter(p -> p.contains(kw)).collect(Collectors.toList()));
-        else
-            model.addAttribute("products", products);
+            @RequestParam Map<String, String> params) {
+       
+        model.addAttribute("categories", this.categoryService.getCategories());
+        model.addAttribute("products", this.productService.getProducts(params, 0));
         
         return "index";
     }
