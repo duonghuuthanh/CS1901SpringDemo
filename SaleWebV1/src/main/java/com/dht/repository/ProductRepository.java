@@ -14,4 +14,5 @@ import java.util.Map;
  */
 public interface ProductRepository {
     List<Product> getProducts(Map<String, String> params, int page);
+    int countProduct();
 }
