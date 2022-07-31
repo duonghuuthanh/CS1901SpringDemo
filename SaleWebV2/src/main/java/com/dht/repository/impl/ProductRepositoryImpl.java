@@ -73,6 +73,8 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             q.where(predicates.toArray(Predicate[]::new));
         }
+        
+        q.orderBy(b.desc(root.get("id")));
 
         Query query = session.createQuery(q);
 
@@ -93,6 +95,34 @@ public class ProductRepositoryImpl implements ProductRepository {
         Query q = session.createQuery("SELECT Count(*) FROM Product");
 
         return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
+    public boolean addProduct(Product p) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        
+        try {
+            session.save(p);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteProduct(int productId) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        
+        try {
+            Product p = session.get(Product.class, productId);
+            session.delete(p);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        
     }
 
 }

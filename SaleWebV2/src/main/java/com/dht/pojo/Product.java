@@ -23,6 +23,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -54,14 +56,16 @@ public class Product implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
+    
+    @Size(min = 1, max = 50, message = "{product.name.err}")
     @Column(name = "name")
     private String name;
     @Size(max = 255)
     @Column(name = "description")
     private String description;
     @Column(name = "price")
+    @Min(value = 10000, message = "{product.price.minErr}")
+    @Max(value = 100000000, message = "{product.price.maxErr}")
     private Long price;
     @Size(max = 50)
     @Column(name = "manufacturer")
