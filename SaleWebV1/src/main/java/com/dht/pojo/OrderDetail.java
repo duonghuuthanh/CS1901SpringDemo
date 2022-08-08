@@ -43,7 +43,7 @@ public class OrderDetail implements Serializable {
     private Long unitPrice;
     @Size(max = 45)
     @Column(name = "num")
-    private String num;
+    private int num;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
@@ -74,11 +74,11 @@ public class OrderDetail implements Serializable {
         this.unitPrice = unitPrice;
     }
 
-    public String getNum() {
+    public int getNum() {
         return num;
     }
 
-    public void setNum(String num) {
+    public void setNum(int num) {
         this.num = num;
     }
 

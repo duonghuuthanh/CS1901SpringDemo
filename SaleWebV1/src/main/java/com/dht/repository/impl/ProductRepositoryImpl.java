@@ -4,7 +4,10 @@
  */
 package com.dht.repository.impl;
 
+import com.dht.pojo.Category;
+import com.dht.pojo.OrderDetail;
 import com.dht.pojo.Product;
+import com.dht.pojo.SaleOrder;
 import com.dht.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,5 +120,45 @@ public class ProductRepositoryImpl implements ProductRepository {
             ex.printStackTrace();
             return false;
         }
+    }
+    
+    @Override
+    public List<Object[]> countProdsByCate() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder b = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> q = b.createQuery(Object[].class);
+        
+        Root rP = q.from(Product.class);
+        Root rC = q.from(Category.class);
+        
+        q.where(b.equal(rP.get("categoryId"), rC.get("id")));
+        q.multiselect(rC.get("id"), rC.get("name"), b.count(rP.get("id")));
+        q.groupBy(rC.get("id"));
+        
+        Query query = session.createQuery(q);
+        return query.getResultList(); 
+    }
+
+    @Override
+    public List<Object[]> revenueStats(int quarter, int y) {
+                Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder b = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> q = b.createQuery(Object[].class);
+        
+        Root rP = q.from(Product.class);
+        Root rD = q.from(OrderDetail.class);
+        Root rO = q.from(SaleOrder.class);
+        
+        q.where(b.equal(rD.get("productId"), rP.get("id")), 
+                b.equal(rD.get("orderId"), rO.get("id")),
+                b.equal(b.function("QUARTER", Integer.class, rO.get("createdDate")), quarter),
+                b.equal(b.function("YEAR", Integer.class, rO.get("createdDate")), y));
+        
+        
+        q.multiselect(rP.get("id"), rP.get("name"), b.sum(b.prod(rD.get("num"), rD.get("unitPrice"))));
+        q.groupBy(rP.get("id"));
+        
+        Query query = session.createQuery(q);
+        return query.getResultList(); 
     }
 }

@@ -43,4 +43,14 @@ public class ProductServiceImpl implements ProductService {
     public boolean deleteProduct(int id) {
         return this.productRepository.deleteProduct(id);
     }
+    
+    @Override
+    public List<Object[]> countProdsByCate() {
+        return this.productRepository.countProdsByCate();
+    }
+
+    @Override
+    public List<Object[]> revenueStats(int quarter, int year) {
+        return this.productRepository.revenueStats(quarter, year);
+    }
 }
