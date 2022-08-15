@@ -4,6 +4,7 @@
  */
 package com.dht.repository;
 
+import com.dht.pojo.Comment;
 import com.dht.pojo.Product;
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,7 @@ public interface ProductRepository {
     boolean deleteProduct(int id);
     List<Object[]> countProdsByCate();
     List<Object[]> revenueStats(int quarter, int year);
+    List<Comment> getComments(int productId);
+    Product getProductById(int productId);
+    Comment addComment(String content, int productId);
 }

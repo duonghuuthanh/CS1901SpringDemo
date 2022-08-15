@@ -4,6 +4,7 @@
  */
 package com.dht.service.impl;
 
+import com.dht.pojo.Comment;
 import com.dht.pojo.Product;
 import com.dht.repository.ProductRepository;
 import com.dht.service.ProductService;
@@ -52,5 +53,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Object[]> revenueStats(int quarter, int year) {
         return this.productRepository.revenueStats(quarter, year);
+    }
+
+    @Override
+    public List<Comment> getComments(int productId) {
+        return this.productRepository.getComments(productId);
+    }
+
+    @Override
+    public Product getProductById(int productId) {
+        return this.productRepository.getProductById(productId);
+    }
+
+    @Override
+    public Comment addComment(String content, int productId) {
+        return this.productRepository.addComment(content, productId);
     }
 }

@@ -5,9 +5,11 @@
 package com.dht.repository.impl;
 
 import com.dht.pojo.Category;
+import com.dht.pojo.Comment;
 import com.dht.pojo.OrderDetail;
 import com.dht.pojo.Product;
 import com.dht.pojo.SaleOrder;
+import com.dht.pojo.User;
 import com.dht.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,6 +169,42 @@ public class ProductRepositoryImpl implements ProductRepository {
         
         Query query = session.createQuery(q);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Comment> getComments(int productId) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        CriteriaBuilder b = session.getCriteriaBuilder();
+        CriteriaQuery<Comment> q = b.createQuery(Comment.class);
+        Root root = q.from(Comment.class);
+        q.select(root);
+        
+        q.where(b.equal(root.get("productId"), productId));
+        
+        Query query = session.createQuery(q);
+        return query.getResultList();
+    }
+
+    @Override
+    public Product getProductById(int id) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        
+        return session.get(Product.class, id);
+    }
+
+    @Override
+    public Comment addComment(String content, int productId) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        
+        Comment c = new Comment();
+        c.setContent(content);
+        c.setProductId(this.getProductById(productId));
+        c.setUserId(session.get(User.class, 6));
+        
+        session.save(c);
+        
+        return c;
     }
 
 }

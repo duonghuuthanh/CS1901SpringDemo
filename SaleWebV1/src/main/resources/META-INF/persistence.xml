@@ -7,6 +7,7 @@
     <class>com.dht.pojo.SaleOrder</class>
     <class>com.dht.pojo.OrderDetail</class>
     <class>com.dht.pojo.Product</class>
+    <class>com.dht.pojo.Comment</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/saledb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

@@ -29,4 +29,9 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/jsp/stats.jsp" />
     </definition>
+     <definition name="details" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiet san pham" />
+        <put-attribute name="content"
+                       value="/WEB-INF/jsp/details.jsp" />
+    </definition>
 </tiles-definitions>

@@ -18,7 +18,7 @@ function deletePro(endpoint, id, obj) {
         }
         
     }).catch(function(err) {
-        console.error(err)
+        console.error(err);
     })
 }
 
@@ -46,6 +46,38 @@ function loadAdminProduct(endpoint) {
         
         let d2 = document.getElementById("myLoading")
         d2.style.display = "none"
+    })
+}
+
+function loadComments(endpoint) {
+    fetch(endpoint).then(function(res) {
+        return res.json();
+    }).then(function(data) {
+        let c = document.getElementById("comments");
+        
+        let h = ''
+        for (let d of data)
+           h += `<li>${d.content} - binh luan boi ${d.user.username} - ${moment(d.createdData).locale("vi").fromNow()}</li>`;
+       c.innerHTML = h;
+    });
+}
+
+function addComment(endpoint, productId) {
+    fetch(endpoint, {
+        method: 'post',
+        body: JSON.stringify({
+            'content': document.getElementById("content").value,
+            'productId': productId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function(res) {
+        return res.json();
+    }).then(function(data) {
+        let d = document.querySelector("#comments li:first-child");
+        let h = `<li>${data.content} - binh luan boi ${data.user.username} - ${moment(data.createdData).locale("vi").fromNow()}</li>`;
+        d.insertAdjacentHTML("beforebegin", h);
     })
 }
 
