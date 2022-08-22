@@ -9,8 +9,8 @@ import com.dht.pojo.Comment;
 import com.dht.pojo.OrderDetail;
 import com.dht.pojo.Product;
 import com.dht.pojo.SaleOrder;
-import com.dht.pojo.User;
 import com.dht.repository.ProductRepository;
+import com.dht.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     private LocalSessionFactoryBean sessionFactory;
     @Autowired
     private Environment env;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Product> getProducts(Map<String, String> params, int page) {
@@ -190,7 +194,9 @@ public class ProductRepositoryImpl implements ProductRepository {
         Comment c = new Comment();
         c.setContent(content);
         c.setProductId(this.getProductById(productId));
-        c.setUserId(session.get(User.class, 6));
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        c.setUserId(this.userRepository.getUserByUsername(authentication.getName()));
         
         session.save(c);
         

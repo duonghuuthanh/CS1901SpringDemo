@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <h1 class="text-center text-danger">CHI TIET SAN PHAM</h1>
@@ -19,10 +20,17 @@
     </div>
 </div>
 <c:url value="/api/products/${product.id}/comments" var="endpoint" />
-<div class="form-group">
-    <textarea class="form-control" placeholder="Nhap noi dung binh luan" id="contentId"></textarea>
-</div>
-<button class="btn btn-danger" onclick="addComment('${endpoint}', ${product.id})">Them binh luan</button>
+
+<sec:authorize access="!isAuthenticated()">
+    <strong>Vui long <a href="<c:url value="/login" />">dang nhap</a> de binh luan!!!</strong>
+</sec:authorize>
+<sec:authorize access="isAuthenticated()">
+    <div class="form-group">
+        <textarea class="form-control" placeholder="Nhap noi dung binh luan" id="contentId"></textarea>
+    </div>
+    <button class="btn btn-danger" onclick="addComment('${endpoint}', ${product.id})">Them binh luan</button>
+</sec:authorize>
+
 
 <ul id="comments" class="list-group"">
 
@@ -32,7 +40,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
 <script src="<c:url value="/js/product.js" />"></script>
 <script>
-        window.onload = function () {
-            loadComments('${endpoint}');
-        }
+    window.onload = function () {
+        loadComments('${endpoint}');
+    }
 </script>
